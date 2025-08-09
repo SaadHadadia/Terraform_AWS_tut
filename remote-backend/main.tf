@@ -1,4 +1,14 @@
 terraform {
+
+  ## TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
+  backend "s3" {
+    bucket         = "terraform-tut-aws-state" # Bucket name
+    key            = "remote-backend/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-state-locking"
+    encrypt        = true
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
