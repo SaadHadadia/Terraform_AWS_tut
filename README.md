@@ -1,18 +1,14 @@
-# Overview + Setup
+# Basic Configuration of the infrastructure
 
 ## Overview
 
-Remote backends enable storage of TF state in a remote, location to enable secure collaboration.
-
-Initialize backend in AWS and manage it with Terraform using **AWS S3 & Dynamo DB**
+Set up and Configuration of a naive implementation of the web application architecture.
 
 ---
 
-### Bootstraping process
+### Architecture
 
-1. Use config from **local state**
-1. (init, plan, apply) to provision s3 bucket and dynamoDB table with local state config
-1. Specify the remote Backend
+![](architecture.png)
 
 ---
 
