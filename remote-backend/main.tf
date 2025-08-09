@@ -2,7 +2,7 @@ terraform {
 
   ## TO SWITCH FROM LOCAL BACKEND TO REMOTE AWS BACKEND
   backend "s3" {
-    bucket         = "terraform-tut-aws-state" # Bucket name
+    bucket         = "terraform-tut-aws-state3" # Bucket name
     key            = "remote-backend/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "terraform-state-locking"
@@ -22,7 +22,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket        = "terraform-tut-aws-state" # Unique Bucket name
+  bucket        = "terraform-tut-aws-state2" # Unique Bucket name
   force_destroy = true
 }
 
