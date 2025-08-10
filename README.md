@@ -56,8 +56,8 @@ This project utilizes the following Terraform modules:
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
+cd Terraform_AWS_tut
 ```
 
 2. Initialize Terraform:
