@@ -205,3 +205,18 @@ resource "aws_route53_record" "www" {
   ttl     = 300
   records = [aws_lb.load_balancer.dns_name]
 }
+
+resource "aws_db_instance" "db_instance" {
+  allocated_storage    = 20
+  # TODO
+  # In the future steps i will remove this hard coded informations and hand them properly
+  auto_minor_version_upgrade = true
+  storage_type               = "standard"
+  engine                     = "postgres"
+  engine_version             = "12"
+  instance_class             = "db.t3.micro"
+  db_name                    = "mydb"
+  username                   = "foo"
+  password                   = "foobarbaz"
+  skip_final_snapshot        = true
+}

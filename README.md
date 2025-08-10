@@ -6,6 +6,16 @@ Set up and Configuration of a naive implementation of the web application archit
 
 ---
 
+## Live Project
+
+You can view the live deployed project here:
+
+👉[http://www.tiltao.site/](http://www.tiltao.site/)
+
+**Note :** The website is not protected by an SSL certificate.
+
+---
+
 ### Architecture
 
 ![](architecture.png)
