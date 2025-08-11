@@ -114,7 +114,7 @@ resource "aws_lb_target_group_attachment" "instances" {
   target_group_arn = aws_lb_target_group.instances.arn
   target_id        = aws_instance.instances[count.index].id
   port             = 8080
-  count            = 2
+  count            = length(aws_instance.instances)
 }
 
 resource "aws_lb_listener_rule" "instances" {

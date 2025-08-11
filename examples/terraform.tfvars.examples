@@ -1,0 +1,5 @@
+region = "eu-west-1"
+project_name  = "terraform-tut-aws"
+env           = "dev"
+create_bucket = true
+bucket_names  = ["logs", "reports"]
