@@ -1,94 +1,141 @@
-# Terraform & AWS Project
+# Organization & Modules
 
 ## Overview
 
-This project provisions basic infrastructure on AWS using Terraform.
+Organizing Terraform configurations into reusable modules is a best practice that enhances scalability, maintainability, and collaboration. Modules allow you to encapsulate infrastructure components, making your code more modular and easier to manage across different environments.
 
 ---
 
-## Content
-
-1. [Overview + Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/first-instance)
-1. [Remote Backend Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/remote-backend)
-1. [Basic Infrastructure Configuration](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/infra-basic-setup)
-1. [Variables and Outputs](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/vars_outputs)
-1. [Language Features](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/lang-features)
-1. [Organization and Modules]()
-1. [Managing Multiple Environments]()
-1. [Testing]()
-1. [Developer Workflows + CI/CD]()
+## Goals
+- Separate Terraform code into **logical modules** (e.g., S3, EC2, VPC)
+- Use a **root module** per environment (dev, prod, staging)
+- Centralize **variables** and **outputs** where possible
+- Make the codebase easy to navigate and extend
 
 ---
 
-## Live Project
+## Types of Modules
 
-You can view the live deployed project here:
+### Root Module
 
-👉[http://www.tiltao.site/](http://www.tiltao.site/)
+The default module where Terraform operations are executed. It typically contains:
 
-**Notes :**
-- The website is not protected by an SSL certificate so it may apear as not secure.
-- The link to the live demo may not be working because of that the infrastructure is destroyed.
+- Provider configurations
+- Resource definitions
+- Module calls
 
----
-
-## Architecture
-![](architecture.png)
-
----
-
-## Requirements
-
-- Terraform v1.0.0 or higher
-- AWS CLI configured with appropriate credentials
-
----
-
-## Providers
-
-- AWS (default provider)
-
----
-
-## Modules
-This project utilizes the following Terraform modules:
-
-- **DynamoDB:** Provisions DynamoDB tables with configurable capacity and indexes.
-
-- **EC2:** Creates EC2 instances with customizable configurations and networking.
-- **RDS:**  Sets up RDS instances for relational databases with various engine support.
-- **Route 53:** Manages DNS records and hosted zones for domain name resolution.
-- **S3:** Creates S3 buckets with features like versioning, encryption, and lifecycle policies.
-- **IAM:** Manages IAM roles, policies, and groups to control access permissions.
-
----
-
-## Usage
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
-cd Terraform_AWS_tut
+```py
+module "vpc" {
+  source = "../modules/vpc"
+}
 ```
 
-2. Initialize Terraform:
+### Child Module
 
-```bash
-terraform init
+A reusable module that can be called by the root module or other modules. It encapsulates specific functionality.
+
+
+```py
+# modules/vpc/main.tf
+resource "aws_vpc" "main" {
+  cidr_block = var.cidr_block
+}
 ```
 
-3. Apply the configuration:
+### Module Sources
 
-```bash
-terraform apply
+Modules can be sourced from various locations:
+
+#### Local Path
+
+```py
+module "web-app" {
+    source = "../web-app"
+}
 ```
 
-4. To destroy the infrastructure:
+#### Terraform Registry
 
-```bash
-terraform destroy
+```py
+module "consul" {
+    source  = "hashicorp/consul/aws"
+    version = "0.1.0"
+}
 ```
+
+#### GitHub
+
+```py
+# HTTP
+module "example" {
+    source = "github.com/username/repo.git/pathToModule?ref=main"
+    
+}
+# SSH
+module "example" {
+    source = "git@github.com:username/repo.git/pathToModule"
+}
+
+# Generic GitHub repo
+module "example" {
+    source = "git@github.com:username@example.com/repo.git"
+}
+```
+
+---
+
+## Inputs and Meta-Arguments
+
+### Inputs
+
+Modules can accept input variables to customize their behavior.
+
+```py
+# modules/vpc/variables.tf
+variable "cidr_block" {
+  type = string
+}
+```
+
+```py
+# root/main.tf
+module "vpc" {
+  source     = "../modules/vpc"
+  cidr_block = "10.0.0.0/16"
+}
+```
+
+### Meta-Arguments
+
+Special arguments that control resource behavior:
+
+- `count`: Creates multiple instances of a resource.
+- `for_each`: Creates multiple instances based on a map or set.
+- `depends_on`: Specifies explicit dependencies between resources.
+- `lifecycle`: Controls resource creation and destruction behavior.
+
+```py
+resource "aws_instance" "example" {
+  count = 2
+  ami   = "ami-12345678"
+  type  = "t2.micro"
+
+  tags = {
+    Name = "Instance ${count.index}"
+  }
+}
+```
+
+---
+
+## Best Practices
+
+- **Modularization:** Break down infrastructure into reusable modules.
+- **Separation of Concerns:** Keep environment-specific configurations separate.
+- **Version Control:** Use version constraints for module sources.
+- **Input Validation:** Define input variable types and descriptions.
+- **Outputs:** Expose necessary information using output variables.
+
 
 ---
 
