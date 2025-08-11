@@ -1,0 +1,7 @@
+bucket_prefix = "terraform-tut-aws-app-data"
+
+domain        = # Domain name
+db_name       = # Database name
+db_user       = # Database username
+
+# db_pass = # Database password
