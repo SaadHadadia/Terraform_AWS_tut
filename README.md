@@ -12,7 +12,7 @@ This project provisions basic infrastructure on AWS using Terraform.
 1. [Remote Backend Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/remote-backend)
 1. [Basic Infrastructure Configuration](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/infra-basic-setup)
 1. [Variables and Outputs](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/vars_outputs)
-1. [Language Features]()
+1. [Language Features](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/lang-features)
 1. [Organization and Modules]()
 1. [Managing Multiple Environments]()
 1. [Testing]()
