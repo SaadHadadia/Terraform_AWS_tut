@@ -20,11 +20,11 @@ variable "var_name" {
 - string
 - number
 - bool
-- list(<TYPE>)
-- set(<TYPE>)
-- map(<TYPE>)
-- object({<ATTR NAME> = <TYPE>, ... })
-- tuple([<TYPE>, ...])
+- list(\<TYPE>)
+- set(\<TYPE>)
+- map(\<TYPE>)
+- object({\<ATTR NAME> = \<TYPE>, ... })
+- tuple([\<TYPE>, ...])
 
 ---
 
