@@ -110,7 +110,7 @@ Allows for creation of multiple of a particular resource or module. This is most
 
 Also allows for multiple of a particular resource or module but allows for more control across the instances by iterating over a list.
 
-```json
+```py
 resource "some_resource" "example" {
   for_each = toset( ["foo", "bar", "baz"] )
   name     = each.key
@@ -127,7 +127,7 @@ Lifecycle meta-arguments control how Terraform treats particular resources.
 
 Specifying `create_before_destroy = true` indicates that if the resource does need to be destroyed, Terraform should first provision its replacement before destroying the deprecated resource. This can be useful for things such as zero downtime deployments.
 
-```json
+```py
 resource "some_resource" "example" {
   # ...
 
