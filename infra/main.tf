@@ -21,26 +21,16 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_instance" "instance_1" {
+resource "aws_instance" "instances" {
   ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS | us-east-1
   instance_type   = "t2.micro"
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
-              echo "Hello, World 1" > index.html
+              echo "Hello, World ${count.index+1}" > index.html
               python3 -m http.server 8080 &
               EOF
-}
-
-resource "aws_instance" "instance_2" {
-  ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS | us-east-1
-  instance_type   = "t2.micro"
-  security_groups = [aws_security_group.instances.name]
-  user_data       = <<-EOF
-              #!/bin/bash
-              echo "Hello, World 2" > index.html
-              python3 -m http.server 8080 &
-              EOF
+  count = 2
 }
 
 resource "aws_s3_bucket" "bucket" {
@@ -120,16 +110,11 @@ resource "aws_lb_target_group" "instances" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "instance_1" {
+resource "aws_lb_target_group_attachment" "instances" {
   target_group_arn = aws_lb_target_group.instances.arn
-  target_id        = aws_instance.instance_1.id
+  target_id        = aws_instance.instances[count.index].id
   port             = 8080
-}
-
-resource "aws_lb_target_group_attachment" "instance_2" {
-  target_group_arn = aws_lb_target_group.instances.arn
-  target_id        = aws_instance.instance_2.id
-  port             = 8080
+  count = 2
 }
 
 resource "aws_lb_listener_rule" "instances" {
