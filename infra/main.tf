@@ -18,33 +18,23 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.region
 }
 
-resource "aws_instance" "instance_1" {
-  ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS | us-east-1
-  instance_type   = "t2.micro"
+resource "aws_instance" "instances" {
+  ami             = var.ami
+  instance_type   = var.instance_type
   security_groups = [aws_security_group.instances.name]
   user_data       = <<-EOF
               #!/bin/bash
-              echo "Hello, World 1" > index.html
+              echo "Hello, World ${count.index + 1}" > index.html
               python3 -m http.server 8080 &
               EOF
-}
-
-resource "aws_instance" "instance_2" {
-  ami             = "ami-011899242bb902164" # Ubuntu 20.04 LTS | us-east-1
-  instance_type   = "t2.micro"
-  security_groups = [aws_security_group.instances.name]
-  user_data       = <<-EOF
-              #!/bin/bash
-              echo "Hello, World 2" > index.html
-              python3 -m http.server 8080 &
-              EOF
+  count           = 2
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket_prefix = "terraform-tut-aws-app-data"
+  bucket_prefix = var.bucket_prefix
   force_destroy = true
 }
 
@@ -120,16 +110,11 @@ resource "aws_lb_target_group" "instances" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "instance_1" {
+resource "aws_lb_target_group_attachment" "instances" {
   target_group_arn = aws_lb_target_group.instances.arn
-  target_id        = aws_instance.instance_1.id
+  target_id        = aws_instance.instances[count.index].id
   port             = 8080
-}
-
-resource "aws_lb_target_group_attachment" "instance_2" {
-  target_group_arn = aws_lb_target_group.instances.arn
-  target_id        = aws_instance.instance_2.id
-  port             = 8080
+  count            = 2
 }
 
 resource "aws_lb_listener_rule" "instances" {
@@ -183,12 +168,12 @@ resource "aws_lb" "load_balancer" {
 }
 
 resource "aws_route53_zone" "primary" {
-  name = "tiltao.site"
+  name = var.domain
 }
 
 resource "aws_route53_record" "root" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "tiltao.site"
+  name    = var.domain
   type    = "A"
 
   alias {
@@ -200,23 +185,21 @@ resource "aws_route53_record" "root" {
 
 resource "aws_route53_record" "www" {
   zone_id = aws_route53_zone.primary.zone_id
-  name    = "www.tiltao.site"
+  name    = "www.${var.domain}"
   type    = "CNAME"
   ttl     = 300
   records = [aws_lb.load_balancer.dns_name]
 }
 
 resource "aws_db_instance" "db_instance" {
-  allocated_storage    = 20
-  # TODO
-  # In the future steps i will remove this hard coded informations and hand them properly
+  allocated_storage          = 20
   auto_minor_version_upgrade = true
   storage_type               = "standard"
   engine                     = "postgres"
   engine_version             = "12"
   instance_class             = "db.t3.micro"
-  db_name                    = "mydb"
-  username                   = "foo"
-  password                   = "foobarbaz"
+  db_name                    = var.db_name
+  username                   = var.db_user
+  password                   = var.db_pass
   skip_final_snapshot        = true
 }

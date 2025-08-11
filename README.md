@@ -1,59 +1,95 @@
-# Terraform & AWS Project
+# Variables and Outputs
 
-## Overview
+## Variables
 
-This project provisions basic infrastructure on AWS using Terraform.
+### Variable block
 
----
+must define variable block
 
-## Content
-
-1. [Overview + Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/first-instance)
-1. [Remote Backend Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/remote-backend)
-1. [Basic Infrastructure Configuration](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/infra-basic-setup)
-1. [Variables and Outputs]()
-1. [Language Features]()
-1. [Organization and Modules]()
-1. [Managing Multiple Environments]()
-1. [Testing]()
-1. [Developer Workflows + CI/CD]()
+```
+variable "var_name" {
+  description = "description"
+  type        = string
+  default     = "default value"
+}
+```
 
 ---
 
-## Architecture
-![](architecture.png)
+### Variable types
+- string
+- number
+- bool
+- list(<TYPE>)
+- set(<TYPE>)
+- map(<TYPE>)
+- object({<ATTR NAME> = <TYPE>, ... })
+- tuple([<TYPE>, ...])
 
 ---
 
-## Requirements
-
-- Terraform v1.0.0 or higher
-- AWS CLI configured with appropriate credentials
+### Variable files
+`variables.tfvars` (or `<FILENAME>.auto.tfvars`) automatically applied 
 
 ---
 
-## Providers
-
-- AWS (default provider)
-
----
-
-## Modules
-This project utilizes the following Terraform modules:
-
-- **DynamoDB:** Provisions DynamoDB tables with configurable capacity and indexes.
-
-- **EC2:** Creates EC2 instances with customizable configurations and networking.
-- **RDS:**  Sets up RDS instances for relational databases with various engine support.
-- **Route 53:** Manages DNS records and hosted zones for domain name resolution.
-- **S3:** Creates S3 buckets with features like versioning, encryption, and lifecycle policies.
-- **IAM:** Manages IAM roles, policies, and groups to control access permissions.
+### Apply default
+`terraform apply`
 
 ---
 
-## Usage
+### Apply a different variable file
+`terraform apply -var-file=another-variable-file.tfvars`
 
-1. Clone the repository:
+---
+
+### Passing Variable via Prompt
+If value not specified, Terraform will prompt for value. (this is okay for testing... but don't depend on it since you should be automating things!)
+```
+  var.db_pass
+  password for database
+
+  Enter a value:
+```
+
+---
+
+### Passing Variables via CLI
+`terraform apply -var="db_pass=$DB_PASS_ENV_VAR"`
+
+
+---
+
+## Setting Input Variabls
+
+In Order of precedence from lowest to highest
+
+- Manual entry during plan/apply
+- Default value in declaration block
+- TF_VAR_\<name> environment variables
+- terraforfm.tfvars file
+- *.auto.tfvars file
+- Command line -var or -var-file
+
+---
+
+## Local Variables
+
+Allows you to store the value of expression for reuse but doesn't allow for passing in values 
+```
+locals {
+  service_name = "forum"
+  owner        = "Community Team"
+}
+```
+
+---
+
+## Output Variables
+
+Allows you to output some value  (which might not be known ahead of time).
+
+For example it might be useful to know the IP address of a VM that was created:
 
 ```bash
 git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
