@@ -4,4 +4,6 @@ domain        = # Domain name
 db_name       = # Database name
 db_user       = # Database username
 
+# The db_pass is commented because it will be passed at runtime
+# Uncoment this to pass it as a parameter
 # db_pass = # Database password
