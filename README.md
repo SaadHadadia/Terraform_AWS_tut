@@ -1,149 +1,94 @@
-# Hashicorp Configuration Language Features
+# Terraform & AWS Project
 
-The official documentation is the best reference for these: https://www.terraform.io/docs/language/index.html
+## Overview
 
-**NOTE:** ` ```py ` is used on code blocks to get highlighting since HCL isn't an allowable language. 
-
----
-
-## Expressions
-
-### Strings
-```py
-"foo" # literal string
-
-"foo ${var.bar}" # template string
-```
-
-### Operators
-```py
-# Order of operations: 
-!, - # (multiplication by -1)
-*, /, % # (modulo)
-+, - # (subtraction)
->, >=, <, <= # (comparison)
-==, != # (equality)
-&& # (AND)
-|| # (OR)
-```
-
-### Conditionals
-
-Ternary syntax can be used to conditionally set values based on other values.
-
-```py
-condition ? true_val : false_val
-
-# For example
-var.a != "" ? var.a : "default-a"
-```
-
-### Other expression types:
-- For expressions
-- Splat expressions
-- Dynamic blocks
-- Type constraints
-- Version constraints
+This project provisions basic infrastructure on AWS using Terraform.
 
 ---
 
-## Functions
-```py
-# Numeric
-abs()
-ceil()
-floor()
-log()
-max()
-parseint() # parse as integer
-pow()
-signum() # sign of number
+## Content
 
-# string
-chomp() # remove newlines at end
-format() # format number
-formatlist()
-indent()
-join()
-lower()
-regex()
-regexall()
-replace()
-split()
-strrev() # reverse string
-substr()
-title()
-trim()
-trimprefix()
-trimsuffix()
-trimspace()
-upper()
-```
-### Other function types:
-- Colleciton
-- Encoding
-- Filesystem
-- Date & Time
-- Hash & Crypto
-- IP Network
-- Type Conversion
+1. [Overview + Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/first-instance)
+1. [Remote Backend Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/remote-backend)
+1. [Basic Infrastructure Configuration](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/infra-basic-setup)
+1. [Variables and Outputs](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/vars_outputs)
+1. [Language Features]()
+1. [Organization and Modules]()
+1. [Managing Multiple Environments]()
+1. [Testing]()
+1. [Developer Workflows + CI/CD]()
 
 ---
 
-## Meta-arguments
+## Live Project
 
-Special arguments to control the behavior of resources and/or modules
+You can view the live deployed project here:
 
-### depends_on
+👉[http://www.tiltao.site/](http://www.tiltao.site/)
 
-Allows specifying dependencies which do not manifest directly through consumption of data from another resource. For example if the creation order of two resources matters, the latter can be specified to depend on the former.
+**Notes :**
+- The website is not protected by an SSL certificate so it may apear as not secure.
+- The link to the live demo may not be working because of that the infrastructure is destroyed.
 
-### count
+---
 
-Allows for creation of multiple of a particular resource or module. This is most useful if each instance configuration is nearly identical.
+## Architecture
+![](architecture.png)
 
-`count.index` can be referenced for each resource.
+---
 
-`Count = 0` can also be used to prevent creation of a resource or modules. This is usually used in conjunction with conditional expression to selectively determine if the resource needs to be created.
+## Requirements
 
-### for_each
+- Terraform v1.0.0 or higher
+- AWS CLI configured with appropriate credentials
 
-Also allows for multiple of a particular resource or module but allows for more control across the instances by iterating over a list.
+---
 
-```json
-resource "some_resource" "example" {
-  for_each = toset( ["foo", "bar", "baz"] )
-  name     = each.key
-}
+## Providers
+
+- AWS (default provider)
+
+---
+
+## Modules
+This project utilizes the following Terraform modules:
+
+- **DynamoDB:** Provisions DynamoDB tables with configurable capacity and indexes.
+
+- **EC2:** Creates EC2 instances with customizable configurations and networking.
+- **RDS:**  Sets up RDS instances for relational databases with various engine support.
+- **Route 53:** Manages DNS records and hosted zones for domain name resolution.
+- **S3:** Creates S3 buckets with features like versioning, encryption, and lifecycle policies.
+- **IAM:** Manages IAM roles, policies, and groups to control access permissions.
+
+---
+
+## Usage
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
+cd Terraform_AWS_tut
 ```
 
-This would create three copies of `some_resource` with the name set to `"foo"`, `"bar"`, and `"baz"` respectively
+2. Initialize Terraform:
 
-### lifecycle
-
-Lifecycle meta-arguments control how Terraform treats particular resources.
-
-#### create_before_destroy
-
-Specifying `create_before_destroy = true` indicates that if the resource does need to be destroyed, Terraform should first provision its replacement before destroying the deprecated resource. This can be useful for things such as zero downtime deployments.
-
-```json
-resource "some_resource" "example" {
-  # ...
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+```bash
+terraform init
 ```
 
-#### ignore_changes
+3. Apply the configuration:
 
-Sometimes an entity outside of terraform will automatically modify a resource (e.g. adding metadata, etc...). The `ignore_changes` argument allows you to ignore specific types of resource changes to prevent this from causing Terraform to attempt to revert those changes.
+```bash
+terraform apply
+```
 
-#### prevent_destroy
+4. To destroy the infrastructure:
 
-`prevent_destroy` provides an additional stopgap against accidentally destroying resources with terraform. If set to true, Terraform will reject any attempt to destroy that resource.
+```bash
+terraform destroy
+```
 
 ---
 
