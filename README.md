@@ -91,19 +91,28 @@ Allows you to output some value  (which might not be known ahead of time).
 
 For example it might be useful to know the IP address of a VM that was created:
 
-```
-output "instance_ip_addr" {
-  value = aws_instance.instance.private_ip
-}
-```
-
-Sample output:
-```
-db_instance_addr = "terraform-20210504182745335900000001.cr2ub9wmsmpg.us-east-1.rds.amazonaws.com"
-instance_ip_addr = "172.31.24.95"
+```bash
+git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
+cd Terraform_AWS_tut
 ```
 
-Will be output after `terraform apply` or `terraform output`
+2. Initialize Terraform:
+
+```bash
+terraform init
+```
+
+3. Apply the configuration:
+
+```bash
+terraform apply
+```
+
+4. To destroy the infrastructure:
+
+```bash
+terraform destroy
+```
 
 ---
 
