@@ -6,6 +6,10 @@ variable "region" {
   default     = "us-east-1"
 }
 
+locals {
+  environment_name = "staging"
+}
+
 # Web application variables
 
 variable "configs" {
@@ -13,7 +17,6 @@ variable "configs" {
     bucket_prefix    = string
     domain           = string
     app_name         = string
-    environment_name = string
     instance_type    = string
     create_dns_zone  = bool
     db_name          = string

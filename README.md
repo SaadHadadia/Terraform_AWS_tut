@@ -1,94 +1,35 @@
-# Terraform & AWS Project
+# Managing Multiple Environments
 
 ## Overview
 
-This project provisions basic infrastructure on AWS using Terraform.
+Managing multiple environments in Terraform ensures that infrastructure changes are isolated, tested, and promoted in a controlled manner.
+
+This approach helps maintain stability in production while enabling experimentation and development in separate environments.
 
 ---
 
-## Content
+## Structure
 
-1. [Overview + Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/first-instance)
-1. [Remote Backend Setup](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/remote-backend)
-1. [Basic Infrastructure Configuration](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/infra-basic-setup)
-1. [Variables and Outputs](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/vars_outputs)
-1. [Language Features](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/lang-features)
-1. [Organization and Modules](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/org-mods)
-1. [Managing Multiple Environments]()
-1. [Testing]()
-1. [Developer Workflows + CI/CD]()
-
----
-
-## Live Project
-
-You can view the live deployed project here:
-
-👉[http://www.tiltao.site/](http://www.tiltao.site/)
-
-**Notes :**
-- The website is not protected by an SSL certificate so it may apear as not secure.
-- The link to the live demo may not be working because of that the infrastructure is destroyed.
-
----
-
-## Architecture
-![](architecture.png)
-
----
-
-## Requirements
-
-- Terraform v1.0.0 or higher
-- AWS CLI configured with appropriate credentials
-
----
-
-## Providers
-
-- AWS (default provider)
-
----
-
-## Modules
-This project utilizes the following Terraform modules:
-
-- **DynamoDB:** Provisions DynamoDB tables with configurable capacity and indexes.
-
-- **EC2:** Creates EC2 instances with customizable configurations and networking.
-- **RDS:**  Sets up RDS instances for relational databases with various engine support.
-- **Route 53:** Manages DNS records and hosted zones for domain name resolution.
-- **S3:** Creates S3 buckets with features like versioning, encryption, and lifecycle policies.
-- **IAM:** Manages IAM roles, policies, and groups to control access permissions.
-
----
-
-## Usage
-
-1. Clone the repository:
-
-```bash
-git clone https://github.com/SaadHadadia/Terraform_AWS_tut.git
-cd Terraform_AWS_tut
+```
+Terraform_AWS_tut/
+├── infra                           # Environment definitions
+│   ├── global/                     # Global resources (e.g., Route53 zone)
+│   ├── production/                 # Production environment
+│   └── bootstrap/                  # Staging/Testing environment
+│
+├── infra-modules/                  # Reusable Terraform modules
+│
+└── remote-backend/                 # Remote backend configuration (state management)
 ```
 
-2. Initialize Terraform:
+---
 
-```bash
-terraform init
-```
+## Benefits of Multiple Environments
 
-3. Apply the configuration:
-
-```bash
-terraform apply
-```
-
-4. To destroy the infrastructure:
-
-```bash
-terraform destroy
-```
+- **Isolation**: Changes in staging don’t affect production.
+- **Testing**: Validate configurations before deploying live.
+- **Reusability**: Share the same modules across environments.
+- **Version Control**: Track environment-specific changes separately.
 
 ---
 
