@@ -2,34 +2,45 @@
 
 ## Overview
 
-Managing multiple environments in Terraform ensures that infrastructure changes are isolated, tested, and promoted in a controlled manner.
-
-This approach helps maintain stability in production while enabling experimentation and development in separate environments.
+Terraform workspaces allow you to manage multiple environments (e.g., `dev`, `staging`, `production`) using the same configuration.
+They’re useful for avoiding duplicate folder structures, but **require careful handling**.
 
 ---
 
-## Structure
+## Example Commands
 
 ```
-Terraform_AWS_tut/
-├── infra                           # Environment definitions
-│   ├── global/                     # Global resources (e.g., Route53 zone)
-│   ├── production/                 # Production environment
-│   └── bootstrap/                  # Staging/Testing environment
-│
-├── infra-modules/                  # Reusable Terraform modules
-│
-└── remote-backend/                 # Remote backend configuration (state management)
+# Create a new workspace
+terraform workspace new production
+
+# List available workspaces
+terraform workspace list
+
+# Switch to another workspace
+terraform workspace select staging
 ```
 
 ---
 
-## Benefits of Multiple Environments
+## Warning
 
-- **Isolation**: Changes in staging don’t affect production.
-- **Testing**: Validate configurations before deploying live.
-- **Reusability**: Share the same modules across environments.
-- **Version Control**: Track environment-specific changes separately.
+Manually switching environments can be risky:
+
+- You might accidentally deploy resources to the wrong environment.
+- State files are isolated per workspace, so wrong selection can lead to unexpected changes.
+- Always double-check the current workspace before running terraform `apply`:
+
+```
+terraform workspace show
+```
+
+---
+
+## Best Practices
+
+- Use automation/scripts to select the correct workspace.
+- Keep environment-specific variables in separate `.tfvars` files.
+- Combine workspaces with a remote backend for better state management.
 
 ---
 
