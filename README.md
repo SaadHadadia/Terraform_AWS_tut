@@ -22,18 +22,6 @@ This project provisions basic infrastructure on AWS using Terraform.
 
 ---
 
-## Live Project
-
-You can view the live deployed project here:
-
-👉[http://www.tiltao.site/](http://www.tiltao.site/)
-
-**Notes :**
-- The website is not protected by an SSL certificate so it may apear as not secure.
-- The link to the live demo may not be working because of that the infrastructure is destroyed.
-
----
-
 ## Architecture
 ![](architecture.png)
 
