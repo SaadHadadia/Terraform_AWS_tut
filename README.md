@@ -17,7 +17,7 @@ This project provisions basic infrastructure on AWS using Terraform.
 1. [Managing Multiple Environments]()
     1. [From worspace](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/env-mgmt/workspaces)
     1. [From file structure](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/env-mgmt/file-structure)
-1. [Testing]()
+1. [Testing](https://github.com/SaadHadadia/Terraform_AWS_tut/tree/test/)
 1. [Developer Workflows + CI/CD]()
 
 ---
